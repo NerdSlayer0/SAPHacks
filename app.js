@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 3000;
 
 app.get("", (req, res) => {
     res.send("Welcome to our SAP Hackathon App!");
-    connection.query(`INSERT INTO customers (id, email, name, active) VELUES (null, ?, ?, ?)`, ["abc.gmail.com", "gabe", "1"], (error, results) => {
+    connection.query(`INSERT INTO customers (id, email, name, active) VELUES (null, "abc.gmail.com", "gabe", 1)`, (error, results) => {
         if (error) console.log(error);
     });
 });

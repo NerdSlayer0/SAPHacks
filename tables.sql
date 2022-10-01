@@ -4,7 +4,7 @@ CREATE TABLE users (
   first_name VARCHAR(50),
   last_name VARCHAR(50),
   password VARCHAR(50),
-  office_location VARCHAR(50),
+  office_location int,
   department VARCHAR(50),
   work_count int,
   PRIMARY KEY (ID)
@@ -13,12 +13,17 @@ CREATE TABLE users (
 
 CREATE TABLE events (
   event_ID int NOT NULL AUTO_INCREMENT,
-  meeting_location VARCHAR(50),
+  event_location int,
   event_type VARCHAR(50),
-  attendee_list VARCHAR(100),
+  event_subject VARCHAR(50),
   PRIMARY KEY (event_ID),
-  FOREIGN KEY (meeting_location) REFERENCES all_locations(location_ID),
-  FOREIGN KEY (attendee_list) REFERENCES users(ID)
+  FOREIGN KEY (event_location) REFERENCES all_locations(location_ID),
+);
+
+CREATE TABLE event_attendance (
+    event_ID int,
+    user_ID int,
+    PRIMARY KEY (event_ID, user_ID)
 );
 
 CREATE TABLE user_interests (
@@ -31,12 +36,14 @@ CREATE TABLE interests (
     interest_ID int,
     user_ID int,
     PRIMARY KEY (interest_ID),
-    FOREIGN_KEY (user_ID) REFERENCES user(ID)
+    FOREIGN KEY (user_ID) REFERENCES user(ID)
 );
 
 CREATE TABLE all_locations (
     location_ID int NOT NULL AUTO_INCREMENT,
-    location_name VARCHAR(50) NOT NULL,
+    location_name VARCHAR(50),
+    location_country VARCHAR(50) NOT NULL,
+    location_office VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE chat_messages (

@@ -26,7 +26,7 @@
     </div>
     <div id="commentInput">
       <input type="text" id="commentContent"/>
-      <button id="commentPostButton">Send</button>
+      <button id="commentPostButton" onclick="sendChat()">Send</button>
     </div>
   </div>
   <div id="optionsContainer">
@@ -36,5 +36,12 @@
   </div>
 </div>
 
-<link href="/css/room.css" rel="stylesheet" />
+<template id="newComment">
+  <div class="commentContainer">
+    <span class="commentContent"></span>
+  </div>
+</template>
+
+<link href="/css/room.css" rel="stylesheet"/>
+<script src="/socket.io/socket.io.js"></script>
 <script src="/js/room.js"></script>

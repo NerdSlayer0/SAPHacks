@@ -1,3 +1,10 @@
+CREATE TABLE all_locations (
+    location_ID int NOT NULL AUTO_INCREMENT,
+    location_name VARCHAR(50),
+    location_country VARCHAR(50) NOT NULL,
+    location_office VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE users (
   ID int NOT NULL AUTO_INCREMENT,
   user_name VARCHAR(50),
@@ -7,8 +14,8 @@ CREATE TABLE users (
   office_location int,
   department VARCHAR(50),
   work_count int,
-  PRIMARY KEY (ID)
-  FOREIGN KEY office_location REFERENCES all_locations(location_ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (office_location) REFERENCES all_locations(location_ID)
 );
 
 CREATE TABLE events (
@@ -37,13 +44,6 @@ CREATE TABLE interests (
     user_ID int,
     PRIMARY KEY (interest_ID),
     FOREIGN KEY (user_ID) REFERENCES user(ID)
-);
-
-CREATE TABLE all_locations (
-    location_ID int NOT NULL AUTO_INCREMENT,
-    location_name VARCHAR(50),
-    location_country VARCHAR(50) NOT NULL,
-    location_office VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE chat_messages (

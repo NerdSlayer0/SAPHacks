@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 const path = require('path');
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const fs = require("fs");
 
 const mysql = require("mysql2");
 const pool = mysql.createPool({

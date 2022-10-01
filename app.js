@@ -5,7 +5,8 @@ const connection = mysql.createConnection({
     port: 3306,
     user: "ba078f4cff050a",
     password: "2ac694ea",
-    database: "heroku_8afbad23634f9c6"
+    database: "heroku_8afbad23634f9c6",
+    connectTimeout: 300
 });
 
 const PORT = process.env.PORT || 3000;

@@ -6,13 +6,15 @@ const connection = mysql.createConnection({
     user: "ba078f4cff050a",
     password: "2ac694ea",
     database: "heroku_8afbad23634f9c6",
-    connectTimeout: 300
 });
 
 const PORT = process.env.PORT || 3000;
 
 app.get("", (req, res) => {
     res.send("Welcome to our SAP Hackathon App!");
+    connection.query(`SELECT * FROM customers`, (error, results) => {
+        if (error) console.log(error);
+    });
 });
 
 app.listen(PORT, () => {

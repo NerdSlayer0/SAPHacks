@@ -18,20 +18,18 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-function renderPage(htmlPath) {
+function renderPage(htmlFileName) {
     let template = new JSDOM(fs.readFileSync(__dirname + "/view/template.html", "utf8"));
-    template.window.document.getElementById("content").innerHTML = fs.readFileSync(htmlPath, "utf8");
+    template.window.document.getElementById("content").innerHTML = fs.readFileSync(`${__dirname}/view/${htmlFileName}.html`, "utf8");
     return template.serialize();
 }
 
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-    res.send(renderPage(__dirname + "/view/main.html"));
+    res.send(renderPage("main"));
 });
 
 app.listen(PORT, () => {
     console.log(`App up at port ${PORT}`);
-    console.log(process.env.DB_HOST);
-    console.log(process.env.DB_PASSWORD);
 });

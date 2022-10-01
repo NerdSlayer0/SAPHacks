@@ -30,10 +30,10 @@ const sharedsession = require("express-socket.io-session");
 io.use(sharedsession(session));
 io.on("connection", socket => {
     let session = socket.handshake.session;
-    socket.on("postComment", (message, room) => {
-        pool.query(``, [], (error) => {
+    socket.on("postComment", (message) => {
+        pool.query(`INSERT INTO comments VALUES (NULL, ?, ?, ?)`, [message, session.room, session.username], (error) => {
             if (error) console.log(error);
-            else io.to(room).emit("updateComment", session.username + ": " + message);
+            else io.to(session.room).emit("updateComment", session.username + ": " + message);
         });
     });
 });

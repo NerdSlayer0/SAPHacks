@@ -1,11 +1,9 @@
 const socket = io();
 
-let code = 4;
-
 function sendChat() {
   const input = document.getElementById("commentContent");
   const message = input.value.trim();
-  if (message) socket.emit("postComment", message, code);
+  if (message) socket.emit("postComment", message);
   input.value = "";
   const list = document.getElementById("commentList");
   list.scrollTop = list.scrollHeight;

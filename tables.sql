@@ -7,8 +7,8 @@ CREATE TABLE users (
   office_location int,
   department VARCHAR(50),
   work_count int,
-  PRIMARY KEY (ID)
-  FOREIGN KEY office_location REFERENCES all_locations(location_ID)
+  PRIMARY KEY (ID),
+  FOREIGN KEY (office_location) REFERENCES all_locations(location_ID)
 );
 
 CREATE TABLE events (
@@ -17,7 +17,7 @@ CREATE TABLE events (
   event_type VARCHAR(50),
   event_subject VARCHAR(50),
   PRIMARY KEY (event_ID),
-  FOREIGN KEY (event_location) REFERENCES all_locations(location_ID),
+  FOREIGN KEY (event_location) REFERENCES all_locations(location_ID)
 );
 
 CREATE TABLE event_attendance (
@@ -36,21 +36,22 @@ CREATE TABLE interests (
     interest_ID int,
     user_ID int,
     PRIMARY KEY (interest_ID),
-    FOREIGN KEY (user_ID) REFERENCES user(ID)
+    FOREIGN KEY (user_ID) REFERENCES users(ID)
 );
 
 CREATE TABLE all_locations (
     location_ID int NOT NULL AUTO_INCREMENT,
     location_name VARCHAR(50),
     location_country VARCHAR(50) NOT NULL,
-    location_office VARCHAR(50) NOT NULL
+    location_office VARCHAR(50) NOT NULL,
+    PRIMARY KEY (location_ID)
 );
 
 CREATE TABLE chat_messages (
-    message_ID int NOT NULL, AUTO_INCREMENT,
-    invite_code int NOT NULL, AUTO_INCREMENT,
+    message_ID int NOT NULL AUTO_INCREMENT,
+    room_code int,
     sender VARCHAR(50),
-    FOREIGN KEY sender REFERENCES user(user_name)
+    PRIMARY KEY (message_ID)
 );
 
 INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_location) VALUES ('geb', 'Gabriel', 'Fairbairn', 'asdf', '1', 'Yaletown');
@@ -59,5 +60,3 @@ INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_
 INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_location) VALUES ('monkey', 'Test', 'Dummy', '0123', '0', 'Bogustown');
 
 INSERT INTO events (event_name, meeting_location, meeting_amenity, host_ID, booking_day, booking_time, event_type) VALUES ('coffee', 'Starbucks - Yaletown', 'None', '1', '2022-02-10', '16:30', 'in-person');
-
-INSERT INTO amenities (amenity_name) VALUES ('Ping Pong Room');

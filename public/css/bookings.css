@@ -1,0 +1,18 @@
+#listContainer {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 40px 1fr;
+  width: 90%;
+  height: 300px;
+  margin: auto;
+}
+
+#listHeader {
+  display: flex;
+  background-color: grey;
+}
+
+#listContent {
+  display: flex;
+  background-color: beige;
+}

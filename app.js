@@ -30,6 +30,10 @@ app.get("/", (req, res) => {
     res.send(renderPage("main"));
 });
 
+app.get("/bookings", (req, res) => {
+    res.send(renderPage("bookings"));
+});
+
 app.listen(PORT, () => {
     console.log(`App up at port ${PORT}`);
 });

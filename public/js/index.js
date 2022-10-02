@@ -62,7 +62,7 @@
 
 async function sendLogin() {
     try {
-        fetch("/login", {
+        let res = await fetch("/login", {
             method: "POST",
             headers: {
                 "Accept": 'application/json',
@@ -74,6 +74,13 @@ async function sendLogin() {
                 inPerson: document.getElementById("inPerson").checked ? "0" : "1"
             })
         });
+        let parsed = await res.json();
+        console.log("Asd");
+        console.log(parsed.status);
+        if (parsed.status == "success") {
+            console.log("passed");
+            window.location.replace("/profile");
+        }
     } catch (error) {
         console.log(error);
     }

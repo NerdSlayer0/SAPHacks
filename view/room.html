@@ -1,0 +1,25 @@
+<div id="chatContainer">
+  <img id="chatLogo" src="/img/slack_logo.jpg" alt="...">
+  <div id="chatList">
+
+  </div>
+  <div id="chatInput">
+    <textarea id="chatContent"></textarea>
+    <button id="chatPostButton" onclick="sendChat()"><i class="fa-solid fa-paper-plane"></i></button>
+  </div>
+</div>
+
+<div id="popupContainer">
+  <span><i class="fa-solid fa-bell" onclick="clickPopup()"></i></span>
+</div>
+
+<template id="newChat">
+  <div class="chatContainer">
+    <span class="chatSender"></span>
+    <span class="chatContent"></span>
+  </div>
+</template>
+
+<link href="/css/room.css" rel="stylesheet"/>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/room.js"></script>

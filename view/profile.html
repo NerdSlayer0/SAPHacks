@@ -1,0 +1,44 @@
+<body>
+    <div class="container">
+
+        <div id="profile-picture">
+            <img id="picture_src" src="" alt="profile">
+        </div>
+        <br>
+        <table id="user_info">
+                <tr>
+                    <td><span>First Name</span></td>
+                    <td><span id="first_name"></span></td>
+                </tr>
+                <tr>
+                    <td><span>Last Name</span></td>
+                    <td><span id="last_name"></span></td>
+                </tr>
+                <tr>
+                    <td><span>Office Location</span></td>
+                    <td><span id="office_location"></span></td>
+                </tr>
+                <tr>
+                    <td><span>Department</span></td>
+                    <td><span id="department"></span></td>
+                </tr>
+
+        </table>
+        </div>
+    </div>
+
+    <template id="itemTemplate">
+        <div class="itemContainer">
+            <img class="itemImage" src="..." alt="...">
+            <span class="itemName"></span>
+            <button type="button" class="itemUse">Use</button>
+        </div>
+    </template>
+</body>
+
+<link href="/css/profile.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400" rel="stylesheet">
+<script src="/js/profile.js"></script>
+<!-- <script src="/js/inventory.js"></script> -->

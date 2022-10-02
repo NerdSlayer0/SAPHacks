@@ -1,0 +1,64 @@
+#chatContainer {
+  display: grid;
+  height: 100vh;
+  grid-template-rows: auto 1fr auto;
+  font-family: 'Noto Sans';
+}
+
+#chatLogo {
+  height: 60px;
+}
+
+#chatList {
+  margin: 10px;
+  overflow-y: scroll;
+  word-break: break-all;
+}
+
+#chatInput {
+  display: grid;
+  grid-template-columns: 1fr 50px;
+  margin: 10px;
+  height: 50px;
+  border: 2px solid grey;
+  border-radius: 8px;
+}
+
+#chatContent {
+  width: calc(100% - 4px);
+  padding: 3px;
+  border: none;
+  border-radius: 8px;
+  outline: none;
+  font-size: 20px;
+  font-family: 'Noto Sans';
+}
+
+#chatPostButton {
+  background-color: transparent;
+  border: none;
+  font-size: 20px;
+}
+
+.chatContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.chatSender {
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.chatContent {
+  font-size: 18px;
+}
+
+#popupContainer {
+  position: fixed;
+  right: -100px;
+  top: 20px;
+  z-index: 1;
+  font-size: 60px;
+  transition: 0.2s right;
+}

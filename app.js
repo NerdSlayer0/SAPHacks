@@ -36,17 +36,20 @@ app.get("/bookings", (req, res) => {
 
 /* ----- login ----- */
 app.post("/login", function (req, res) {
-    res.setHeader("Content-Type", "application/json");
-    connection.query(`SELECT * FROM users WHERE user_name = ? AND password = ?`,
+    console.log(req);
+    console.log(req.body.username + ", " + req.body.password);
+    pool.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`,
         [req.body.username, req.body.password],
         function (error, results) {
             if (error || !results || !results.length) {
+                console.log("error!");
                 if (error) console.log(error);
                 res.send({
                     status: "fail",
                     msg: "User account not found."
                 });
             } else {
+                console.log("good!");
                 // user authenticated, create a session
                 req.session.loggedIn = true;
                 req.session.lastname = results[0].last_name;

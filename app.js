@@ -1,5 +1,10 @@
 const express = require("express");
 const app = express();
+const session = require("express-session")({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true
+});
 const path = require('path');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
@@ -11,9 +16,11 @@ const pool = mysql.createPool({
     port: 3306,
     user: "ba078f4cff050a",
     password: "2ac694ea",
-    database: "heroku_8afbad23634f9c6"
+    database: "heroku_8afbad23634f9c6",
+    connectionLimit: 10
 });
 
+app.use(session);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
@@ -36,7 +43,6 @@ app.get("/bookings", (req, res) => {
 
 /* ----- login ----- */
 app.post("/login", function (req, res) {
-    console.log(req);
     console.log(req.body.username + ", " + req.body.password);
     pool.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`,
         [req.body.username, req.body.password],
@@ -72,17 +78,22 @@ app.post("/login", function (req, res) {
 
                 // all we are doing as a server is telling the client that they
                 // are logged in, it is up to them to switch to the profile page
+                console.log("good tooyy");
                 res.send({
                     status: "success",
-                    msg: "Logged in.",
-                    isAdmin: (results[0].is_admin == 1)
+                    msg: "Logged in."
+                    //isAdmin: (results[0].is_admin == 1)
                 });
             }
         });
 });
 
+app.get("/profile", (req, res) => {
+    res.send(renderPage("profile"));
+});
+
 /* ----- profile ----- */
-app.get("/profile", function (req, res) {
+app.get("/profileInit", function (req, res) {
     // check for a session first!
     if (req.session.loggedIn) {
 

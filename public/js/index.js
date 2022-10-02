@@ -71,7 +71,7 @@ async function sendLogin() {
             body: JSON.stringify({
                 username: document.getElementById("username").value,
                 password: document.getElementById("password").value
-                //inPerson: document.getElementById("inPerson").checked ? "0" : "1"
+                inPerson: document.getElementById("inPerson").checked ? "0" : "1"
             })
         });
     } catch (error) {

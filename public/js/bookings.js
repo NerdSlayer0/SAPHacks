@@ -12,9 +12,10 @@ async function showEvent() {
             }
         });
         let parsed = await response.json();
-        document.getElementById("location_listing").innerHTML = `Location: ${parsed.newEvent} \n`;
+        document.getElementById("location_listing").innerHTML = `Location: ${parsed.newLocation} \n`;
         document.getElementById("event-type").innerHTML = `Event Type: ${parsed.newType} \n`;
         document.getElementById("subject").innerHTML = `Location: ${parsed.newSubject} \n`;
+        document.getElementById("attendees").innerHTML = `Location: ${parsed.newAttendees} \n`;
     } catch (error) {
         console.log(error);
     }

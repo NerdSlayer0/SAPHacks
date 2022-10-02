@@ -47,29 +47,34 @@ app.listen(PORT, () => {
 
 app.get("/showEvent", (req, res) => {
     let eventResult;
-    let attendeeResult;
+    let newAttendees;
 
     pool.query(`SELECT TOP 1 from users ORDER BY rand();`), (error, results1) => {
         if (error) console.log(error);
-        attendeeResult = results1;
+        newAttendees = results1[0];
     };
 
     if (req.session.inOffice = 0) {
         pool.query(`SELECT * FROM events WHERE event_type = 'online' ORDER BY rand();`, (error, results2) => {
             if (error) console.log(error);
-            eventResult = results2;
+            eventResult = results2[0];
         });
     } else {
         pool.query(`SELECT * FROM events WHERE event_type = 'in-person' ORDER BY rand();`, (error, results2) => {
             if (error) console.log(error);
-            eventResult = results2;
+            eventResult = results2[0];
         });
     }
+    pool.query(`SELECT * FROM all_locations WHERE location_ID = ?;`, [eventResult.event_location], (error, results3) => {
+        if (error) console.log(error);
+        newLocation = results3[0];
+    });
+
     res.send({
-        newEvent: results2[0].event_location,
-        newType: results2[0].event_type,
-        newSubject: results2[0].event_subject,
-        attendeeResult: results1[0].user_name
+        newLocation: newLocation.location_name,
+        newType: eventResult.event_tpe,
+        newSubject: eventResult.event_subject,
+        newAttendees: newAttendees.user_name
     });
 });
 

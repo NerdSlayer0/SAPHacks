@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Qapitaly-515vx';
+    src: url('/fonts/Qapitaly-515vx.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Qapitaly-515vx';
+}
+
+#formPanel {
+    padding-top: 100px;
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+button {
+    width: 70px;
+    height: 30px;
+    border-radius: 20px;
+  }

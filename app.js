@@ -46,26 +46,33 @@ app.listen(PORT, () => {
 });
 
 app.get("/showEvent", (req, res) => {
+    let eventResult;
+    let attendeeResult;
+
+    pool.query(`SELECT TOP 1 from users ORDER BY rand();`), (error, results1) => {
+        if (error) console.log(error);
+        attendeeResult = results1;
+    };
+
     if (req.session.inOffice = 0) {
-        pool.query(`SELECT * FROM events WHERE event_type = 'online' ORDER BY rand();`, (error, results) => {
+        pool.query(`SELECT * FROM events WHERE event_type = 'online' ORDER BY rand();`, (error, results2) => {
             if (error) console.log(error);
-            res.send({
-                newEvent: results[0].event_location,
-                newType: results[0].event_type,
-                newSubject: results[0].event_subject
-            });
+            eventResult = results2;
         });
     } else {
-        pool.query(`SELECT * FROM events WHERE event_type = 'in-person' ORDER BY rand();`, (error, results) => {
+        pool.query(`SELECT * FROM events WHERE event_type = 'in-person' ORDER BY rand();`, (error, results2) => {
             if (error) console.log(error);
-            res.send({
-                newEvent: results[0].event_location,
-                newType: results[0].event_type,
-                newSubject: results[0].event_subject
-            });
+            eventResult = results2;
         });
     }
+    res.send({
+        newEvent: results2[0].event_location,
+        newType: results2[0].event_type,
+        newSubject: results2[0].event_subject,
+        attendeeResult: results1[0].user_name
+    });
 });
+
 
 //^^ This stuff goes here
 // app.get("/schedule", (req, res) => {

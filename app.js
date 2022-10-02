@@ -134,8 +134,8 @@ app.get("/profileInit", function (req, res) {
     }
 });
 
-app.get("/room", (req, res) => {
-    res.send(renderPage("room"));
+app.get("/slack", (req, res) => {
+    res.send(renderPage("slack"));
 });
 
 server.listen(PORT, () => {

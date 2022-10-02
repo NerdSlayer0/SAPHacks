@@ -15,9 +15,9 @@ function sendChat() {
   }
 }
 
-socket.on("updateChat", (Mcontent, sender = "Raphael") => {
+socket.on("updateChat", (Mcontent, sender) => {
   let template = document.getElementById("newChat").content.cloneNode(true);
-  if (last != sender) template.querySelector(".chatSender").innerHTML = "Raphael";
+  if (last != sender) template.querySelector(".chatSender").innerHTML = sender;
   template.querySelector(".chatContent").innerHTML = Mcontent;
   let chat = document.getElementById("chatList")
   chat.appendChild(template);

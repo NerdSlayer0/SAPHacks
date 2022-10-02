@@ -79,7 +79,7 @@ async function sendLogin() {
         console.log(parsed.status);
         if (parsed.status == "success") {
             console.log("passed");
-            window.location.replace("/profile");
+            window.location.replace("/slack");
         }
     } catch (error) {
         console.log(error);

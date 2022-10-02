@@ -19,20 +19,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const mysql = require("mysql2");
-const {
-    connect
-} = require("http2");
 const pool = mysql.createPool({
     host: "us-cdbr-east-06.cleardb.net",
     port: 3306,
     user: "ba078f4cff050a",
     password: "2ac694ea",
     database: "heroku_8afbad23634f9c6",
-    connectionLimit: 10
+    connectionLimit: undefined
 });
 
 const io = require("socket.io")(server);
 const sharedsession = require("express-socket.io-session");
+const { log } = require("console");
 io.use(sharedsession(session));
 io.on("connection", socket => {
     let session = socket.handshake.session;
@@ -144,39 +142,44 @@ server.listen(PORT, () => {
     console.log(`App up at port ${PORT}`);
 });
 
-app.get("/showEvent", (req, res) => {
-    let eventResult;
+app.get("/showEvent1", (req, res) => {
     let newAttendees;
-
-    pool.query(`SELECT * from users ORDER BY rand();`), (error, results1) => {
+    pool.query(`SELECT * from users ORDER BY rand();`, (error, results1) => {
         if (error) console.log(error);
-        newAttendees = results1[0];
-    };
-
-    if (req.session.inOffice = 0) {
-        pool.query(`SELECT * FROM events WHERE event_type = 'online' ORDER BY rand();`, (error, results2) => {
-            if (error) console.log(error);
-            eventResult = results2[0];
+        newAttendees = results1[0].user_name;
+        res.send({
+            newAttendees: newAttendees
         });
-    } else {
-        pool.query(`SELECT * FROM events WHERE event_type = 'in-person' ORDER BY rand();`, (error, results2) => {
-            if (error) console.log(error);
-            eventResult = results2[0];
-        });
-    }
-    pool.query(`SELECT * FROM all_locations WHERE location_ID = ?;`, [eventResult.event_location], (error, results3) => {
-        if (error) console.log(error);
-        locationResults = results3[0];
-    });
-
-    res.send({
-        newLocation: locationResults.location_name,
-        newType: eventResult.event_tpe,
-        newSubject: eventResult.event_subject,
-        newAttendees: newAttendees.user_name
     });
 });
 
+app.get("/showEvent2", (req, res) => {
+    let eventLocation;
+    let eventType;
+    let eventSubject;
+    pool.query(`SELECT * FROM events WHERE event_type = ? ORDER BY rand();`, [req.session.inOffice == 0 ? 'Online' : 'In-person'], (error, results2) => {
+        if (error) console.log(error);
+        eventLocation = results2[0].event_location;
+        eventType = results2[0].event_type;
+        eventSubject = results2[0].event_subject
+        res.send({
+            newLocation: eventLocation,
+            newType: eventType,
+            newSubject: eventSubject
+        });
+    });
+});
+
+app.get("/showEvent3", (req, res) => {
+    let locationName;
+    pool.query(`SELECT * FROM all_locations WHERE location_ID = ?;`, [req.body.eventLocation], (error, results3) => {
+        if (error) console.log(error);
+        locationName = results3[0].location_name;
+        res.send({
+            newLocation: locationName
+        });
+    });
+});
 
 //^^ This stuff goes here
 // app.get("/schedule", (req, res) => {

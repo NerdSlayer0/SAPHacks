@@ -61,20 +61,17 @@ app.get("/bookings", (req, res) => {
 
 /* ----- login ----- */
 app.post("/login", function (req, res) {
-    console.log(req);
-    console.log(req.body.username + ", " + req.body.password);
-    pool.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`,
+    res.setHeader("Content-Type", "application/json");
+    connection.query(`SELECT * FROM users WHERE user_name = ? AND password = ?`,
         [req.body.username, req.body.password],
         function (error, results) {
             if (error || !results || !results.length) {
-                console.log("error!");
                 if (error) console.log(error);
                 res.send({
                     status: "fail",
                     msg: "User account not found."
                 });
             } else {
-                console.log("good!");
                 // user authenticated, create a session
                 req.session.loggedIn = true;
                 req.session.lastname = results[0].last_name;
@@ -163,11 +160,11 @@ app.get("/showEvent", (req, res) => {
     }
     pool.query(`SELECT * FROM all_locations WHERE location_ID = ?;`, [eventResult.event_location], (error, results3) => {
         if (error) console.log(error);
-        newLocation = results3[0];
+        locationResults = results3[0];
     });
 
     res.send({
-        newLocation: newLocation.location_name,
+        newLocation: locationResults.location_name,
         newType: eventResult.event_tpe,
         newSubject: eventResult.event_subject,
         newAttendees: newAttendees.user_name

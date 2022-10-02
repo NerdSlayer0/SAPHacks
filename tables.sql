@@ -1,10 +1,3 @@
-CREATE TABLE all_locations (
-    location_ID int NOT NULL AUTO_INCREMENT,
-    location_name VARCHAR(50),
-    location_country VARCHAR(50) NOT NULL,
-    location_office VARCHAR(50) NOT NULL
-);
-
 CREATE TABLE users (
   ID int NOT NULL AUTO_INCREMENT,
   user_name VARCHAR(50),
@@ -40,24 +33,35 @@ CREATE TABLE user_interests (
 );
 
 CREATE TABLE interests (
-    interest_ID int,
+    interest_ID int NOT NULL AUTO_INCREMENT,
     user_ID int,
+    interest_name VARCHAR(50),
     PRIMARY KEY (interest_ID),
     FOREIGN KEY (user_ID) REFERENCES user(ID)
+);
+
+CREATE TABLE all_locations (
+    location_ID int NOT NULL AUTO_INCREMENT,
+    location_name VARCHAR(50),
+    location_country VARCHAR(50) NOT NULL,
+    location_office VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE chat_messages (
     message_ID int NOT NULL, AUTO_INCREMENT,
     invite_code int NOT NULL, AUTO_INCREMENT,
     sender VARCHAR(50),
+    content text,
     FOREIGN KEY sender REFERENCES user(user_name)
 );
 
-INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_location) VALUES ('geb', 'Gabriel', 'Fairbairn', 'asdf', '1', 'Yaletown');
-INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_location) VALUES ('raphael', 'Secret', 'Weapon', 'asdf', '1', 'Yaletown');
-INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_location) VALUES ('lilnaz', 'Naz', 'Mohammadi', 'asdf', '1', 'Yaletown');
-INSERT INTO users (user_name, first_name, last_name, password, is_admin, office_location) VALUES ('monkey', 'Test', 'Dummy', '0123', '0', 'Bogustown');
+INSERT INTO users (ID, user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('0', 'geb', 'Gabriel', 'Fairbairn', 'asdf', 'Yaletown', 'IT', '0');
+INSERT INTO users (user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('raphael', 'Secret', 'Weapon', 'asdf', '1', 'Yaletown', 'IT', '0');
+INSERT INTO users (user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('lilnaz', 'Naz', 'Mohammadi', 'asdf', '1', 'Yaletown', 'IT', '0');
+INSERT INTO users (user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('monkey', 'Test', 'Dummy', '0123', '0', 'Bogustown', 'Unemployed', '0');
 
-INSERT INTO events (event_name, meeting_location, meeting_amenity, host_ID, booking_day, booking_time, event_type) VALUES ('coffee', 'Starbucks - Yaletown', 'None', '1', '2022-02-10', '16:30', 'in-person');
+INSERT INTO events (event_location, event_type, event_subject) VALUES ('1', 'In-person', 'Coffee');
 
-INSERT INTO amenities (amenity_name) VALUES ('Ping Pong Room');
+INSERT INTO all_locations (location_ID, location_name, location_country, location_office) VALUES ('1', 'Coffee Room', 'CAN', 'Vancouver Yaletown')
+
+INSERT INTO interests (user_ID, interest_ID, interest_name) VALUES ('0', '0', 'Coffee')

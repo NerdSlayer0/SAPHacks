@@ -49,7 +49,7 @@ app.get("/showEvent", (req, res) => {
     let eventResult;
     let newAttendees;
 
-    pool.query(`SELECT TOP 1 from users ORDER BY rand();`), (error, results1) => {
+    pool.query(`SELECT * from users ORDER BY rand();`), (error, results1) => {
         if (error) console.log(error);
         newAttendees = results1[0];
     };

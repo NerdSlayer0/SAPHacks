@@ -15,16 +15,17 @@ async function showEvent() {
         document.getElementById("location_listing").innerHTML = `Location: ${parsed.newLocation} \n`;
         document.getElementById("event-type").innerHTML = `Event Type: ${parsed.newType} \n`;
         document.getElementById("subject").innerHTML = `Location: ${parsed.newSubject} \n`;
+
         document.getElementById("attendees").innerHTML = `Location: ${parsed.newAttendees} \n`;
     } catch (error) {
         console.log(error);
     }
 }
 
-    document.getElementById("schedule").onClick = () => schedule(); //when someone makes a customized event, send an invite
+    // document.getElementById("schedule").onClick = () => schedule(); //when someone makes a customized event, send an invite
 
-    function schedule() {
+    // function schedule() {
         // code to update schedule
-    };
+    // };
     // let str = "<option value=";
     // document.getElementById("event-type").innerHTML = str;

@@ -1,9 +1,20 @@
 const express = require("express");
 const app = express();
+const server = require("http").createServer(app);
+const session = require("express-session")({
+    secret: "secret",
+    resave: true,
+    saveUninitialized: true
+});
 const path = require('path');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const fs = require("fs");
+
+app.use(session);
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.static(path.join(__dirname, 'public')));
 
 const mysql = require("mysql2");
 const pool = mysql.createPool({
@@ -14,9 +25,18 @@ const pool = mysql.createPool({
     database: "heroku_8afbad23634f9c6"
 });
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(__dirname, 'public')));
+const io = require("socket.io")(server);
+const sharedsession = require("express-socket.io-session");
+io.use(sharedsession(session));
+io.on("connection", socket => {
+    let session = socket.handshake.session;
+    socket.on("postChat", (message) => {
+        io.emit("updateChat", message, session.username);
+        pool.query(`INSERT INTO chat_messages VALUES (NULL, ?, ?, ?)`, [session.room, session.username, message], (error) => {
+            if (error) console.log(error);
+        });
+    });
+});
 
 function renderPage(htmlFileName) {
     let template = new JSDOM(fs.readFileSync(__dirname + "/view/template.html", "utf8"));
@@ -105,6 +125,10 @@ app.get("/profile", function (req, res) {
     }
 });
 
-app.listen(PORT, () => {
+app.get("/room", (req, res) => {
+    res.send(renderPage("room"));
+});
+
+server.listen(PORT, () => {
     console.log(`App up at port ${PORT}`);
 });

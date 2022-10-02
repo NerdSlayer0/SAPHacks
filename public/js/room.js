@@ -1,20 +1,26 @@
 const socket = io();
 
 function sendChat() {
-  const input = document.getElementById("commentContent");
+  const input = document.getElementById("chatContent");
   const message = input.value.trim();
-  if (message) socket.emit("postComment", message);
+  if (message) socket.emit("postChat", message);
   input.value = "";
-  const list = document.getElementById("commentList");
+  const list = document.getElementById("chatList");
   list.scrollTop = list.scrollHeight;
 }
 
-socket.on("updateComment", (message) => {
-  postComment(message);
+socket.on("updateChat", (message) => {
+  postChat(message);
 });
 
-function postComment(message) {
-  let template = document.getElementById("newComment").content.cloneNode(true);
-  template.querySelector(".commentContent").innerHTML = message;
-  document.getElementById("commentList").appendChild(template);
+function postChat(message) {
+  let template = document.getElementById("newChat").content.cloneNode(true);
+  template.querySelector(".chatContent").innerHTML = message;
+  document.getElementById("chatList").appendChild(template);
 }
+
+window.addEventListener('keydown', (event) => {
+  if (event.key == 'Enter') {
+    sendChat();
+  }
+});

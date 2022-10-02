@@ -1,49 +1,18 @@
-#roomContainer {
+#chatContainer {
   display: grid;
-  grid-template-rows: auto 1fr 40px;
-  gap: 20px;
-  height: 100vh;
+  grid-template-rows: auto auto auto;
 }
 
-#eventContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+#chatList {
+  height: 30vh;
+  overflow-y: scroll;
 }
 
-#eventTitle {
-  font-size: 30px;
-  text-align: center;
-}
-
-.eventContentItem {
-  display: flex;
-  flex-direction: column;
-}
-
-.eventContentItemLabel {
-  font-size: 20px;
-}
-
-#commentContainer {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
-}
-
-#commentList {
-  border: 1px solid grey;
-}
-
-#commentInput {
+#chatInput {
   display: grid;
   grid-template-columns: 1fr 50px;
 }
 
-#commentContent {
-  width: 100%;
-}
-
-#optionsContainer {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);;
+#chatContent {
+  width: calc(100% - 4px);
 }

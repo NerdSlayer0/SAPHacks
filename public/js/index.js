@@ -28,7 +28,8 @@ ready(function () {
         e.preventDefault();
         let username = document.getElementById("username");
         let password = document.getElementById("password");
-        let queryString = "username=" + username.value + "&password=" + password.value;
+        let inPerson = document.getElementById("inPerson").checked ? "0" : "1";
+        let queryString = "username=" + username.value + "&password=" + password.value + "&inPerson=" + inPerson;
         ajaxPOST("/login", function (data) {
             if (data) {
                 let dataParsed = JSON.parse(data);

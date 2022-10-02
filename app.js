@@ -61,6 +61,7 @@ app.post("/login", function (req, res) {
                 req.session.workCount = results[0].work_count;
                 req.session.department = results[0].department;
                 //req.session.isGuest = false;
+                req.session.inPerson = req.body.inPerson;
 
                 req.session.save((error) => {
                     if (error) console.log(error);

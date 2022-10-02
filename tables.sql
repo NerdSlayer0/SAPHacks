@@ -6,6 +6,7 @@ CREATE TABLE users (
   password VARCHAR(50),
   office_location int,
   department VARCHAR(50),
+  in_office BIT,
   work_count int,
   PRIMARY KEY (ID),
   FOREIGN KEY (office_location) REFERENCES all_locations(location_ID)
@@ -37,7 +38,7 @@ CREATE TABLE interests (
     user_ID int,
     interest_name VARCHAR(50),
     PRIMARY KEY (interest_ID),
-    FOREIGN KEY (user_ID) REFERENCES user(ID)
+    FOREIGN KEY (user_ID) REFERENCES users(ID)
 );
 
 CREATE TABLE all_locations (
@@ -52,7 +53,7 @@ CREATE TABLE chat_messages (
     invite_code int NOT NULL, AUTO_INCREMENT,
     sender VARCHAR(50),
     content text,
-    FOREIGN KEY sender REFERENCES user(user_name)
+    FOREIGN KEY sender REFERENCES users(user_name)
 );
 
 INSERT INTO users (ID, user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('0', 'geb', 'Gabriel', 'Fairbairn', 'asdf', 'Yaletown', 'IT', '0');
@@ -60,8 +61,16 @@ INSERT INTO users (user_name, first_name, last_name, password, office_location, 
 INSERT INTO users (user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('lilnaz', 'Naz', 'Mohammadi', 'asdf', '1', 'Yaletown', 'IT', '0');
 INSERT INTO users (user_name, first_name, last_name, password, office_location, department, work_count) VALUES ('monkey', 'Test', 'Dummy', '0123', '0', 'Bogustown', 'Unemployed', '0');
 
-INSERT INTO events (event_location, event_type, event_subject) VALUES ('1', 'In-person', 'Coffee');
-
 INSERT INTO all_locations (location_ID, location_name, location_country, location_office) VALUES ('1', 'Coffee Room', 'CAN', 'Vancouver Yaletown')
+INSERT INTO all_locations (location_ID, location_name, location_country, location_office) VALUES ('2', 'Wordle', 'CAN', 'Online');
+INSERT INTO all_locations (location_ID, location_name, location_country, location_office) VALUES ('3', 'littlebigsnake.com', 'CAN', 'Online');
+INSERT INTO all_locations (location_ID, location_name, location_country, location_office) VALUES ('4', 'chess.com', 'CAN', 'Online');
+INSERT INTO all_locations (location_ID, location_name, location_country, location_office) VALUES ('5', 'funtrivia.com', 'CAN', 'Online');
+
+INSERT INTO events (event_location, event_type, event_subject) VALUES ('1', 'In-person', 'Coffee');
+INSERT INTO events (event_location, event_type, event_subject) VALUES ('2', 'Online', 'Wordle');
+INSERT INTO events (event_location, event_type, event_subject) VALUES ('3', 'Online', 'Little Big Snake');
+INSERT INTO events (event_location, event_type, event_subject) VALUES ('4', 'Online', 'Chess');
+INSERT INTO events (event_location, event_type, event_subject) VALUES ('5', 'Online', 'Trivia');
 
 INSERT INTO interests (user_ID, interest_ID, interest_name) VALUES ('0', '0', 'Coffee')

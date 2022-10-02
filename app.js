@@ -2,10 +2,15 @@ const express = require("express");
 const app = express();
 const path = require('path');
 const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
+const {
+    JSDOM
+} = jsdom;
 const fs = require("fs");
 
 const mysql = require("mysql2");
+const {
+    connect
+} = require("http2");
 const pool = mysql.createPool({
     host: "us-cdbr-east-06.cleardb.net",
     port: 3306,
@@ -15,7 +20,9 @@ const pool = mysql.createPool({
 });
 
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({
+    extended: false
+}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 function renderPage(htmlFileName) {
@@ -37,3 +44,39 @@ app.get("/bookings", (req, res) => {
 app.listen(PORT, () => {
     console.log(`App up at port ${PORT}`);
 });
+
+app.get("/showEvent", (req, res) => {
+    if (req.session.inOffice = 0) {
+        pool.query(`SELECT * FROM events WHERE event_type = 'online' ORDER BY rand();`, (error, results) => {
+            if (error) console.log(error);
+            res.send({
+                newEvent: results[0].event_location,
+                newType: results[0].event_type,
+                newSubject: results[0].event_subject
+            });
+        });
+    } else {
+        pool.query(`SELECT * FROM events WHERE event_type = 'in-person' ORDER BY rand();`, (error, results) => {
+            if (error) console.log(error);
+            res.send({
+                newEvent: results[0].event_location,
+                newType: results[0].event_type,
+                newSubject: results[0].event_subject
+            });
+        });
+    }
+});
+
+//^^ This stuff goes here
+// app.get("/schedule", (req, res) => {
+//     connection.query('SELECT * FROM locations ;', function (error, results, fields) {
+//     if (error) {
+//       console.log(error);
+//     }
+//     console.log('Rows returned are: ', results);
+//     res.send({
+//       status: "success",
+//       rows: results
+//     });
+//   });
+// })

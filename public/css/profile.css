@@ -1,0 +1,60 @@
+@font-face {
+    font-family: 'Qapitaly-515vx';
+    src: url('/fonts/Qapitaly-515vx.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.container {
+    margin-top: 60px;
+}
+#picture_src {
+    width: 200px;
+    height: 200px;
+    border: 2px solid grey;
+}
+
+.center {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+  }
+
+#user_info {
+    font-family: "Qapitaly-515vx";
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+    max-width: 500px;
+}
+
+/* table,
+th,
+td {
+    border: 1px solid black;
+    margin: 30px;
+    background-color: rgb(212, 231, 240);
+}
+
+th,
+td {
+    padding: 10px;
+} */
+
+#user_info td, #user_info tr {
+    border: 1px solid #ddd;
+    padding: 8px;
+  }
+  
+  #user_info tr:nth-child(even){background-color: #f2f2f2;}
+  
+  #user_info tr:hover {background-color: #ddd;}
+  
+  #user_info th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #74f4e7;
+    color: white;
+  }

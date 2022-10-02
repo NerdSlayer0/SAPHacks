@@ -1,6 +1,6 @@
 function addEventListeners() {
 
-    document.getElementById("user_name").addEventListener("click", editUsername);
+    document.getElementById("username").addEventListener("click", editUsername);
 
     document.getElementById("password").addEventListener("click", editPassword);
 }

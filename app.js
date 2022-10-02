@@ -19,20 +19,18 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 const mysql = require("mysql2");
-const {
-    connect
-} = require("http2");
 const pool = mysql.createPool({
     host: "us-cdbr-east-06.cleardb.net",
     port: 3306,
     user: "ba078f4cff050a",
     password: "2ac694ea",
     database: "heroku_8afbad23634f9c6",
-    connectionLimit: 10
+    connectionLimit: undefined
 });
 
 const io = require("socket.io")(server);
 const sharedsession = require("express-socket.io-session");
+const { log } = require("console");
 io.use(sharedsession(session));
 io.on("connection", socket => {
     let session = socket.handshake.session;
@@ -62,10 +60,9 @@ app.get("/bookings", (req, res) => {
 
 /* ----- login ----- */
 app.post("/login", function (req, res) {
-    console.log(req.body.username + ", " + req.body.password);
-    pool.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`,
-        [req.body.username, req.body.password],
-        function (error, results) {
+    pool.getConnection(function(err, connection) {
+        // Use the connection
+        connection.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`, [req.body.username, req.body.password], function (error, results, fields) {
             if (error || !results || !results.length) {
                 if (error) console.log(error);
                 res.send({
@@ -102,81 +99,101 @@ app.post("/login", function (req, res) {
                     //isAdmin: (results[0].is_admin == 1)
                 });
             }
+            connection.release();
+          if (error) throw error;
         });
+      });
 });
 
 app.get("/profile", (req, res) => {
-    res.send(renderPage("profile"));
+    
+    let page = new JSDOM(renderPage("profile"));
+
+    // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
+    page.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
+    page.window.document.getElementById("first_name").innerHTML = req.session.username;
+    page.window.document.getElementById("last_name").innerHTML = req.session.lastname;
+    page.window.document.getElementById("office_location").innerHTML = req.session.location;
+    page.window.document.getElementById("department").innerHTML = req.session.department;
+    res.send(page.serialize());
 });
 
 /* ----- profile ----- */
-app.get("/profileInit", function (req, res) {
-    // check for a session first!
-    if (req.session.loggedIn) {
+// app.get("/profileInit", function (req, res) {
+    
+//     // check for a session first!
+//     if (req.session.loggedIn) {
+//         res.send({
+//             username: req.session.username,
+//         });
+//         let profileDOM = wrap("./app/html/profile.html", req.session);
 
-        let profileDOM = wrap("./app/html/profile.html", req.session);
+//         // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
+//         profileDOM.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
+//         profileDOM.window.document.getElementById("first_name").innerHTML = req.session.username;
+//         profileDOM.window.document.getElementById("last_name").innerHTML = req.session.lastname;
+//         profileDOM.window.document.getElementById("office_location").innerHTML = req.session.location;
+//         profileDOM.window.document.getElementById("department").innerHTML = req.session.department;
 
-        // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
-        profileDOM.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
-        profileDOM.window.document.getElementById("first_name").innerHTML = req.session.username;
-        profileDOM.window.document.getElementById("last_name").innerHTML = req.session.lastname;
-        profileDOM.window.document.getElementById("office_location").innerHTML = req.session.location;
-        profileDOM.window.document.getElementById("department").innerHTML = req.session.department;
+//         res.set("Server", "SAP Engine");
+//         res.set("X-Powered-By", "SAP");
+        
 
-        res.set("Server", "SAP Engine");
-        res.set("X-Powered-By", "SAP");
-        res.send(profileDOM.serialize());
+//     } else {
+//         // not logged in - no session and no access, redirect to home!
+//         if (req.session.isGuest) req.session.destroy((error) => {
+//             if (error) res.status(400).send("Unable to log out");
+//         });
+//         res.redirect("/");
+//     }
+// });
 
-    } else {
-        // not logged in - no session and no access, redirect to home!
-        if (req.session.isGuest) req.session.destroy((error) => {
-            if (error) res.status(400).send("Unable to log out");
-        });
-        res.redirect("/");
-    }
-});
-
-app.get("/room", (req, res) => {
-    res.send(renderPage("room"));
+app.get("/slack", (req, res) => {
+    res.send(renderPage("slack"));
 });
 
 server.listen(PORT, () => {
     console.log(`App up at port ${PORT}`);
 });
 
-app.get("/showEvent", (req, res) => {
-    let eventResult;
+app.get("/showEvent1", (req, res) => {
     let newAttendees;
-
-    pool.query(`SELECT * from users ORDER BY rand();`), (error, results1) => {
+    pool.query(`SELECT * from users ORDER BY rand();`, (error, results1) => {
         if (error) console.log(error);
-        newAttendees = results1[0];
-    };
-
-    if (req.session.inOffice = 0) {
-        pool.query(`SELECT * FROM events WHERE event_type = 'online' ORDER BY rand();`, (error, results2) => {
-            if (error) console.log(error);
-            eventResult = results2[0];
+        newAttendees = results1[0].user_name;
+        res.send({
+            newAttendees: newAttendees
         });
-    } else {
-        pool.query(`SELECT * FROM events WHERE event_type = 'in-person' ORDER BY rand();`, (error, results2) => {
-            if (error) console.log(error);
-            eventResult = results2[0];
-        });
-    }
-    pool.query(`SELECT * FROM all_locations WHERE location_ID = ?;`, [eventResult.event_location], (error, results3) => {
-        if (error) console.log(error);
-        locationResults = results3[0];
-    });
-
-    res.send({
-        newLocation: locationResults.location_name,
-        newType: eventResult.event_tpe,
-        newSubject: eventResult.event_subject,
-        newAttendees: newAttendees.user_name
     });
 });
 
+app.get("/showEvent2", (req, res) => {
+    let eventLocation;
+    let eventType;
+    let eventSubject;
+    pool.query(`SELECT * FROM events WHERE event_type = ? ORDER BY rand();`, [req.session.inOffice == 0 ? 'Online' : 'In-person'], (error, results2) => {
+        if (error) console.log(error);
+        eventLocation = results2[0].event_location;
+        eventType = results2[0].event_type;
+        eventSubject = results2[0].event_subject
+        res.send({
+            newLocation: eventLocation,
+            newType: eventType,
+            newSubject: eventSubject
+        });
+    });
+});
+
+app.get("/showEvent3", (req, res) => {
+    let locationName;
+    pool.query(`SELECT * FROM all_locations WHERE location_ID = ?;`, [req.body.eventLocation], (error, results3) => {
+        if (error) console.log(error);
+        locationName = results3[0].location_name;
+        res.send({
+            newLocation: locationName
+        });
+    });
+});
 
 //^^ This stuff goes here
 // app.get("/schedule", (req, res) => {

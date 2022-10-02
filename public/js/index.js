@@ -75,11 +75,12 @@ async function sendLogin() {
             })
         });
         let parsed = await res.json();
+        localStorage.setItem("inPerson", document.getElementById("inPerson").checked ? "0" : "1");
         console.log("Asd");
         console.log(parsed.status);
         if (parsed.status == "success") {
             console.log("passed");
-            window.location.replace("/profile");
+            window.location.replace("/slack");
         }
     } catch (error) {
         console.log(error);

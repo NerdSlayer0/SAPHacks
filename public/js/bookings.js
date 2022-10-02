@@ -54,6 +54,10 @@ async function showEvent3() {
 }
 
 
+document.getElementById("subject").innerHTML += localStorage.getItem("inPerson") == "0" ? "Coffee" : "Wordle";
+document.getElementById("event-type").innerHTML += localStorage.getItem("inPerson") == "0" ? "In Person" : "Online";
+document.getElementById("location_listing").innerHTML += localStorage.getItem("inPerson") == "0" ? "Coffee Room" : "https://www.wordle.com";
+
     // document.getElementById("schedule").onClick = () => schedule(); //when someone makes a customized event, send an invite
 
     // function schedule() {

@@ -60,10 +60,9 @@ app.get("/bookings", (req, res) => {
 
 /* ----- login ----- */
 app.post("/login", function (req, res) {
-    console.log(req.body.username + ", " + req.body.password);
-    pool.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`,
-        [req.body.username, req.body.password],
-        function (error, results) {
+    pool.getConnection(function(err, connection) {
+        // Use the connection
+        connection.query(`SELECT * FROM users WHERE user_name = ? AND password = ?;`, [req.body.username, req.body.password], function (error, results, fields) {
             if (error || !results || !results.length) {
                 if (error) console.log(error);
                 res.send({
@@ -100,7 +99,10 @@ app.post("/login", function (req, res) {
                     //isAdmin: (results[0].is_admin == 1)
                 });
             }
+            connection.release();
+          if (error) throw error;
         });
+      });
 });
 
 app.get("/profile", (req, res) => {

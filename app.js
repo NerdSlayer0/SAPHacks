@@ -27,7 +27,7 @@ function renderPage(htmlFileName) {
 const PORT = process.env.PORT || 3000;
 
 app.get("/", (req, res) => {
-    res.send(renderPage("main"));
+    res.send(renderPage("index"));
 });
 
 app.get("/bookings", (req, res) => {
@@ -75,6 +75,33 @@ app.post("/login", function (req, res) {
                 });
             }
         });
+});
+
+/* ----- profile ----- */
+app.get("/profile", function (req, res) {
+    // check for a session first!
+    if (req.session.loggedIn) {
+
+        let profileDOM = wrap("./app/html/profile.html", req.session);
+
+        // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
+        profileDOM.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
+        profileDOM.window.document.getElementById("first_name").innerHTML = req.session.username;
+        profileDOM.window.document.getElementById("last_name").innerHTML = req.session.lastname;
+        profileDOM.window.document.getElementById("office_location").innerHTML = req.session.location;
+        profileDOM.window.document.getElementById("department").innerHTML = req.session.department;
+
+        res.set("Server", "SAP Engine");
+        res.set("X-Powered-By", "SAP");
+        res.send(profileDOM.serialize());
+
+    } else {
+        // not logged in - no session and no access, redirect to home!
+        if (req.session.isGuest) req.session.destroy((error) => {
+            if (error) res.status(400).send("Unable to log out");
+        });
+        res.redirect("/");
+    }
 });
 
 app.listen(PORT, () => {

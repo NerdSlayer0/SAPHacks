@@ -11,9 +11,14 @@
 
 <body>
     <div id="formPanel">
-        <p id="formTitle">Welcome</p>
+        <span id="formTitle">Welcome! Please log In with your credentials.</span>
+        <br>
+        <br>
         <input id="username" type="text" required="required" placeholder="Username" />
+        <br>
+        <br>
         <input id="password" type="password" required="required" placeholder="Password" />
+        <br>
         <br>
         <input type="radio" id="inPerson" name="attendType" value="In Person">
         <label for="inPerson">In Person</label><br>
@@ -22,8 +27,8 @@
         <br>
         <button id="submit" onclick="sendLogin()">login</button>
         <!-- <a id="guest" href="/main">Countinue as guest</a> -->
-        <p><span id="serverMsg"></span></p>
-        <p id="errorMsg">&nbsp;</p>
+        <span id="serverMsg"></span>
+        <span id="errorMsg">&nbsp;</span>
     </div>
 
     <!-- <footer id="footer">

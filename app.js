@@ -104,35 +104,47 @@ app.post("/login", function (req, res) {
 });
 
 app.get("/profile", (req, res) => {
-    res.send(renderPage("profile"));
+    
+    let page = new JSDOM(renderPage("profile"));
+
+    // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
+    page.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
+    page.window.document.getElementById("first_name").innerHTML = req.session.username;
+    page.window.document.getElementById("last_name").innerHTML = req.session.lastname;
+    page.window.document.getElementById("office_location").innerHTML = req.session.location;
+    page.window.document.getElementById("department").innerHTML = req.session.department;
+    res.send(page.serialize());
 });
 
 /* ----- profile ----- */
-app.get("/profileInit", function (req, res) {
-    // check for a session first!
-    if (req.session.loggedIn) {
+// app.get("/profileInit", function (req, res) {
+    
+//     // check for a session first!
+//     if (req.session.loggedIn) {
+//         res.send({
+//             username: req.session.username,
+//         });
+//         let profileDOM = wrap("./app/html/profile.html", req.session);
 
-        let profileDOM = wrap("./app/html/profile.html", req.session);
+//         // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
+//         profileDOM.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
+//         profileDOM.window.document.getElementById("first_name").innerHTML = req.session.username;
+//         profileDOM.window.document.getElementById("last_name").innerHTML = req.session.lastname;
+//         profileDOM.window.document.getElementById("office_location").innerHTML = req.session.location;
+//         profileDOM.window.document.getElementById("department").innerHTML = req.session.department;
 
-        // profileDOM.window.document.getElementsByTagName("title")[0].innerHTML = req.session.username + "'s Profile";
-        profileDOM.window.document.getElementById("picture_src").src = "/img/circle-avatar.jpg";
-        profileDOM.window.document.getElementById("first_name").innerHTML = req.session.username;
-        profileDOM.window.document.getElementById("last_name").innerHTML = req.session.lastname;
-        profileDOM.window.document.getElementById("office_location").innerHTML = req.session.location;
-        profileDOM.window.document.getElementById("department").innerHTML = req.session.department;
+//         res.set("Server", "SAP Engine");
+//         res.set("X-Powered-By", "SAP");
+        
 
-        res.set("Server", "SAP Engine");
-        res.set("X-Powered-By", "SAP");
-        res.send(profileDOM.serialize());
-
-    } else {
-        // not logged in - no session and no access, redirect to home!
-        if (req.session.isGuest) req.session.destroy((error) => {
-            if (error) res.status(400).send("Unable to log out");
-        });
-        res.redirect("/");
-    }
-});
+//     } else {
+//         // not logged in - no session and no access, redirect to home!
+//         if (req.session.isGuest) req.session.destroy((error) => {
+//             if (error) res.status(400).send("Unable to log out");
+//         });
+//         res.redirect("/");
+//     }
+// });
 
 app.get("/slack", (req, res) => {
     res.send(renderPage("slack"));

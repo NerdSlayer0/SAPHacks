@@ -31,7 +31,7 @@ io.use(sharedsession(session));
 io.on("connection", socket => {
     let session = socket.handshake.session;
     socket.on("postChat", (message) => {
-        io.emit("updateChat", session.username + ": " + message);
+        io.emit("updateChat", message, session.username);
         pool.query(`INSERT INTO chat_messages VALUES (NULL, ?, ?, ?)`, [session.room, session.username, message], (error) => {
             if (error) console.log(error);
         });
